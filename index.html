@@ -4580,7 +4580,11 @@ document.getElementById("authCreate").onclick=async()=>{
   const password=document.getElementById("authPassword").value;
   if(!email||password.length<8){ cloudMsg("Enter your email and a password of at least 8 characters.",true); return; }
   cloudMsg("Creating account…");
-  const {data,error}=await cloudClient.auth.signUp({ email, password });
+  const {data,error}=await cloudClient.auth.signUp({
+    email,
+    password,
+    options:{ emailRedirectTo:"https://roster.esens.in" }
+  });
   if(error){ cloudMsg(error.message,true); return; }
   if(data.session){
     await authorizeSession(data.session);
