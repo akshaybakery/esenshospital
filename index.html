@@ -332,8 +332,48 @@ summary em{font-style:normal;font-family:var(--sans);font-size:12.5px;letter-spa
   thead{display:table-header-group}
 }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+body.auth-locked > :not(#authGate):not(script):not(style){visibility:hidden!important}
+#authGate{position:fixed;inset:0;z-index:100000;background:#F7F8F6;display:flex;align-items:center;justify-content:center;padding:20px}
+#authGate[hidden]{display:none!important}
+.auth-card{width:min(440px,100%);background:#fff;border:1px solid #D8DCD6;padding:28px;box-shadow:0 12px 40px rgba(20,35,31,.10)}
+.auth-card h2{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-weight:400;font-size:28px;margin:0 0 6px;color:#14231F}
+.auth-card p{color:#4A5A54;margin:0 0 18px}
+.auth-card label{display:block;font:10.5px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase;color:#4A5A54;margin:12px 0 5px}
+.auth-card input{width:100%;padding:10px 11px;border:1px solid #B4BCB6;background:#fff;font:15px system-ui}
+.auth-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.auth-actions button{padding:10px 14px;border:1px solid #14231F;background:#14231F;color:#fff;cursor:pointer}
+.auth-actions button.secondary{background:#fff;color:#14231F}
+#authMsg{min-height:20px;margin-top:14px;font-size:13px}
+#cloudBar{position:sticky;top:0;z-index:9000;background:#14231F;color:#fff;padding:7px 14px;display:none;gap:10px;align-items:center;justify-content:flex-end;font:12px system-ui}
+#cloudBar button{background:transparent;border:1px solid #8C9993;color:#fff;padding:5px 9px;cursor:pointer}
+#cloudState{margin-right:auto;opacity:.9}
+</style>
 </head>
-<body>
+<body class="auth-locked">
+<div id="authGate">
+  <div class="auth-card">
+    <h2>Esens Hospital Roster</h2>
+    <p>Authorized users only. Sign in with your Esens email account.</p>
+    <label for="authEmail">Email</label>
+    <input id="authEmail" type="email" autocomplete="username" placeholder="name@esens.in">
+    <label for="authPassword">Password</label>
+    <input id="authPassword" type="password" autocomplete="current-password" placeholder="Password">
+    <div class="auth-actions">
+      <button type="button" id="authSignIn">Sign in</button>
+      <button type="button" class="secondary" id="authCreate">First time? Create account</button>
+    </div>
+    <div id="authMsg"></div>
+  </div>
+</div>
+<div id="cloudBar">
+  <span id="cloudState">Cloud: connecting…</span>
+  <span id="cloudUser"></span>
+  <button type="button" id="cloudPassword">Change password</button>
+  <button type="button" id="cloudSignOut">Sign out</button>
+</div>
 <div class="wrap">
 
 <header class="masthead">
@@ -1157,7 +1197,7 @@ function generateFlexible(){
       const conflicts=nightBalanceConflicts(r.sched);if(conflicts.length){showNightBalanceError(conflicts);return;}
       roster=r.sched;stats=r.st;gapList=[];evList=r.events;cycleOffMap=r.cycleOff;lateShiftMap=r.lateShiftMap;capWorkMap={};rosterMeta={idleErrors:[]};rosterSignature=signature;
       issuedHistory=[...issuedHistory.filter(x=>x.start!==$('startDate').value),{start:$('startDate').value,days:cfg().days,sched:roster,cycleOff:cycleOffMap,capWork:{}}].slice(-2);
-      renderRoster();renderSummary();renderStaffingReport();renderGaps();renderAvail();updateStatus();tabFlags();qRefresh();if(rosterView!=='grid')setRosterView(rosterView);showTab('sRoster');
+      renderRoster();renderSummary();renderStaffingReport();renderGaps();renderAvail();updateStatus();tabFlags();qRefresh();if(rosterView!=='grid')setRosterView(rosterView);showTab('sRoster');if(window.cloudSaveAll)window.cloudSaveAll(true);
     };
     worker.onerror=e=>{cleanup();fail('The background scheduler could not run: '+e.message);};
     timer=setTimeout(()=>{cleanup();fail('The balanced search reached its 90-second limit. Try again or review restrictive availability.');},90000);
@@ -3553,7 +3593,203 @@ function printableDocument(html, orient, name, margin="10mm", withToolbar=false)
     `#printDoc{display:block!important}`+
     `@media screen{body{padding:8mm}#printDoc{max-width:100%;margin:0 auto}}`+
     `@media print{body{padding:0!important}#printToolbar{display:none!important}}</style></head>`+
-    `<body>${toolbar}<div id="printDoc" class="pd">${html}</div></body></html>`;
+    `<body>${toolbar}<div id="printDoc" class="pd">${html}</div>
+<script>
+const ROSTER_SUPABASE_URL = "https://aufmqhggktedbtxcdlhg.supabase.co";
+const ROSTER_SUPABASE_KEY = "sb_publishable_GeAAsRXav8USU3y0CJb9CQ_Ujoa0Bw9";
+const cloudClient = window.supabase.createClient(ROSTER_SUPABASE_URL, ROSTER_SUPABASE_KEY);
+let cloudAuthorized = false;
+let cloudUser = null;
+let cloudRole = null;
+let cloudSaveTimer = null;
+let cloudLoading = false;
+
+function cloudMsg(message, isError=false){
+  const el=document.getElementById("authMsg");
+  if(el){ el.textContent=message||""; el.style.color=isError?"#B5342A":"#2C6E52"; }
+}
+function cloudStatus(message){
+  const el=document.getElementById("cloudState");
+  if(el) el.textContent=message;
+}
+function cloudSetupObject(){
+  const prior = typeof getPriorDayNurses==="function" ? getPriorDayNurses() : [];
+  return {
+    v:17, skills, posts, staff, avail, issuedHistory, startState, startStateDate,
+    leaveApprovals, workOffApprovals,
+    settings:{
+      startDate:$("startDate").value, numDays:$("numDays").value, weekOffs:$("weekOffs").value,
+      attempts:$("attempts").value, maxNights:$("maxNights").value, maxRun:$("maxRun").value,
+      restAfterNight:$("restAfterNight").value, balance:$("balance").value, shortPolicy:$("shortPolicy").value,
+      maxPosts:$("maxPosts").value, rotate:$("rotate").value, minBlock:$("minBlock").value,
+      autoLeave:$("autoLeave").value, blockMode:$("blockMode").value, alternate:$("alternate").value,
+      dayBlock:$("dayBlock").value, nightBlock:$("nightBlock").value,
+      orgName:$("orgName").value, signLine:$("signLine").value, priorDayNurses:prior
+    }
+  };
+}
+function cloudSnapshot(){
+  return {
+    version:1,
+    setup:cloudSetupObject(),
+    roster, stats, gapList, evList, cycleOffMap, lateShiftMap, capWorkMap,
+    rosterMeta, rosterSignature,
+    saved_at:new Date().toISOString()
+  };
+}
+async function cloudSaveAll(saveHistory=false){
+  if(!cloudAuthorized || !cloudUser || cloudLoading) return;
+  try{
+    cloudStatus("Cloud: saving…");
+    const snapshot=cloudSnapshot();
+    const {error}=await cloudClient.from("roster_state").upsert({
+      id:"current", data:snapshot, updated_at:new Date().toISOString(), updated_by:cloudUser.id
+    });
+    if(error) throw error;
+    if(saveHistory && roster){
+      const start=$("startDate").value;
+      const endDate=new Date(start+"T00:00:00");
+      endDate.setDate(endDate.getDate()+cfg().days-1);
+      const end=`${endDate.getFullYear()}-${String(endDate.getMonth()+1).padStart(2,"0")}-${String(endDate.getDate()).padStart(2,"0")}`;
+      const {error:hErr}=await cloudClient.from("roster_history").insert({
+        roster_start:start,
+        roster_end:end,
+        roster_month:start.slice(0,7),
+        data:snapshot,
+        generated_by:cloudUser.id
+      });
+      if(hErr) throw hErr;
+    }
+    cloudStatus("Cloud: saved " + new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}));
+  }catch(err){
+    console.error("Cloud save failed",err);
+    cloudStatus("Cloud save failed");
+  }
+}
+window.cloudSaveAll=cloudSaveAll;
+
+function scheduleCloudSave(){
+  if(!cloudAuthorized || cloudLoading) return;
+  clearTimeout(cloudSaveTimer);
+  cloudSaveTimer=setTimeout(()=>cloudSaveAll(false),1200);
+}
+
+async function cloudLoad(){
+  cloudLoading=true;
+  try{
+    cloudStatus("Cloud: loading…");
+    const {data,error}=await cloudClient.from("roster_state").select("data").eq("id","current").maybeSingle();
+    if(error) throw error;
+    const snap=data?.data;
+    if(snap?.setup){
+      loadSetup(JSON.stringify(snap.setup));
+      if(Array.isArray(snap.roster)){
+        roster=snap.roster;
+        stats=snap.stats||null;
+        gapList=Array.isArray(snap.gapList)?snap.gapList:[];
+        evList=Array.isArray(snap.evList)?snap.evList:[];
+        cycleOffMap=snap.cycleOffMap||{};
+        lateShiftMap=snap.lateShiftMap||{};
+        capWorkMap=snap.capWorkMap||{};
+        rosterMeta=snap.rosterMeta||null;
+        rosterSignature=snap.rosterSignature||currentRosterSignature();
+        renderRoster();renderSummary();renderStaffingReport();renderGaps();renderAvail();updateStatus();tabFlags();qRefresh();
+        if(rosterView!=="grid") setRosterView(rosterView);
+      }
+      cloudStatus("Cloud: restored");
+    }else{
+      cloudStatus("Cloud: ready");
+      await cloudSaveAll(false);
+    }
+  }catch(err){
+    console.error("Cloud load failed",err);
+    cloudStatus("Cloud load failed");
+  }finally{
+    cloudLoading=false;
+  }
+}
+
+async function authorizeSession(session){
+  const user=session?.user;
+  if(!user){ lockRoster(); return false; }
+  const email=(user.email||"").toLowerCase();
+  const {data,error}=await cloudClient.from("authorized_users").select("email,role,active").eq("email",email).maybeSingle();
+  if(error || !data || !data.active){
+    await cloudClient.auth.signOut();
+    lockRoster();
+    cloudMsg("This account is not authorized to access the roster.",true);
+    return false;
+  }
+  cloudAuthorized=true; cloudUser=user; cloudRole=data.role;
+  document.body.classList.remove("auth-locked");
+  document.getElementById("authGate").hidden=true;
+  document.getElementById("cloudBar").style.display="flex";
+  document.getElementById("cloudUser").textContent=email;
+  cloudMsg("");
+  await cloudLoad();
+  return true;
+}
+function lockRoster(){
+  cloudAuthorized=false; cloudUser=null; cloudRole=null;
+  document.body.classList.add("auth-locked");
+  document.getElementById("authGate").hidden=false;
+  document.getElementById("cloudBar").style.display="none";
+}
+
+async function restoreSession(){
+  const {data:{session}}=await cloudClient.auth.getSession();
+  if(session) await authorizeSession(session); else lockRoster();
+}
+
+document.getElementById("authSignIn").onclick=async()=>{
+  const email=document.getElementById("authEmail").value.trim().toLowerCase();
+  const password=document.getElementById("authPassword").value;
+  if(!email||!password){ cloudMsg("Enter email and password.",true); return; }
+  cloudMsg("Signing in…");
+  const {data,error}=await cloudClient.auth.signInWithPassword({email,password});
+  if(error){ cloudMsg(error.message,true); return; }
+  await authorizeSession(data.session);
+};
+
+document.getElementById("authCreate").onclick=async()=>{
+  const email=document.getElementById("authEmail").value.trim().toLowerCase();
+  const password=document.getElementById("authPassword").value;
+  if(!email||password.length<8){ cloudMsg("Enter your email and a password of at least 8 characters.",true); return; }
+  cloudMsg("Creating account…");
+  const {data,error}=await cloudClient.auth.signUp({
+    email,password,
+    options:{emailRedirectTo:window.location.origin+window.location.pathname}
+  });
+  if(error){ cloudMsg(error.message,true); return; }
+  if(data.session){
+    await authorizeSession(data.session);
+  }else{
+    cloudMsg("Account created. Check your email to confirm it, then return here and sign in.");
+  }
+};
+
+document.getElementById("cloudSignOut").onclick=async()=>{
+  await cloudClient.auth.signOut(); lockRoster(); cloudMsg("Signed out.");
+};
+document.getElementById("cloudPassword").onclick=async()=>{
+  const p=prompt("Enter a new password (minimum 8 characters):");
+  if(!p) return;
+  if(p.length<8){ alert("Password must be at least 8 characters."); return; }
+  const {error}=await cloudClient.auth.updateUser({password:p});
+  alert(error ? "Password change failed: "+error.message : "Password changed.");
+};
+
+document.addEventListener("input",scheduleCloudSave);
+document.addEventListener("change",scheduleCloudSave);
+document.addEventListener("click",e=>{
+  if(e.target && ["qAdd","workApprove","resetAvail","addSkill","addPost","addStaff","applyBulk"].includes(e.target.id)) scheduleCloudSave();
+});
+cloudClient.auth.onAuthStateChange((event,session)=>{
+  if(event==="SIGNED_OUT") lockRoster();
+});
+restoreSession();
+</script>
+</body></html>`;
 }
 
 function doPrint(html, orient, name, margin="10mm"){
