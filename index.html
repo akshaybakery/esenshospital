@@ -3594,6 +3594,7 @@ function printableDocument(html, orient, name, margin="10mm", withToolbar=false)
     `@media screen{body{padding:8mm}#printDoc{max-width:100%;margin:0 auto}}`+
     `@media print{body{padding:0!important}#printToolbar{display:none!important}}</style></head>`+
     `<body>${toolbar}<div id="printDoc" class="pd">${html}</div>
+
 <script>
 const ROSTER_SUPABASE_URL = "https://aufmqhggktedbtxcdlhg.supabase.co";
 const ROSTER_SUPABASE_KEY = "sb_publishable_GeAAsRXav8USU3y0CJb9CQ_Ujoa0Bw9";
@@ -3756,15 +3757,12 @@ document.getElementById("authCreate").onclick=async()=>{
   const password=document.getElementById("authPassword").value;
   if(!email||password.length<8){ cloudMsg("Enter your email and a password of at least 8 characters.",true); return; }
   cloudMsg("Creating account…");
-  const {data,error}=await cloudClient.auth.signUp({
-    email,password,
-    options:{emailRedirectTo:window.location.origin+window.location.pathname}
-  });
+  const {data,error}=await cloudClient.auth.signUp({ email, password });
   if(error){ cloudMsg(error.message,true); return; }
   if(data.session){
     await authorizeSession(data.session);
   }else{
-    cloudMsg("Account created. Check your email to confirm it, then return here and sign in.");
+    cloudMsg("Account created. Check your email and confirm the address, then return here and sign in.");
   }
 };
 
