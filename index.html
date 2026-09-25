@@ -364,6 +364,12 @@ body.auth-locked > :not(#authGate):not(script):not(style){visibility:hidden!impo
     <div class="auth-actions">
       <button type="button" id="authSignIn">Sign in</button>
       <button type="button" class="secondary" id="authCreate">First time? Create account</button>
+      <button type="button" class="secondary" id="authForgot">Forgot password</button>
+    </div>
+    <div id="authResetBox" hidden>
+      <label for="authNewPassword">New password</label>
+      <input id="authNewPassword" type="password" autocomplete="new-password" placeholder="New password">
+      <div class="auth-actions"><button type="button" id="authSetPassword">Set new password</button></div>
     </div>
     <div id="authMsg"></div>
   </div>
@@ -4575,6 +4581,27 @@ document.getElementById("authSignIn").onclick=async()=>{
   await authorizeSession(data.session);
 };
 
+document.getElementById("authForgot").onclick=async()=>{
+  const email=document.getElementById("authEmail").value.trim().toLowerCase();
+  if(!email){ cloudMsg("Enter your email address first.",true); return; }
+  cloudMsg("Sending password reset email…");
+  const {error}=await cloudClient.auth.resetPasswordForEmail(email,{
+    redirectTo:"https://roster.esens.in"
+  });
+  if(error){ cloudMsg(error.message,true); return; }
+  cloudMsg("Password reset email sent. Open the newest reset email.");
+};
+
+document.getElementById("authSetPassword").onclick=async()=>{
+  const p=document.getElementById("authNewPassword").value;
+  if(p.length<8){ cloudMsg("Password must be at least 8 characters.",true); return; }
+  const {error}=await cloudClient.auth.updateUser({password:p});
+  if(error){ cloudMsg(error.message,true); return; }
+  document.getElementById("authResetBox").hidden=true;
+  document.getElementById("authPassword").value="";
+  cloudMsg("Password changed. Sign in with your new password.");
+};
+
 document.getElementById("authCreate").onclick=async()=>{
   const email=document.getElementById("authEmail").value.trim().toLowerCase();
   const password=document.getElementById("authPassword").value;
@@ -4611,6 +4638,13 @@ document.addEventListener("click",e=>{
 });
 cloudClient.auth.onAuthStateChange((event,session)=>{
   if(event==="SIGNED_OUT") lockRoster();
+  if(event==="PASSWORD_RECOVERY"){
+    document.body.classList.add("auth-locked");
+    document.getElementById("authGate").hidden=false;
+    document.getElementById("cloudBar").style.display="none";
+    document.getElementById("authResetBox").hidden=false;
+    cloudMsg("Enter a new password below.");
+  }
 });
 restoreSession();
 </script>
