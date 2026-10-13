@@ -15,7 +15,7 @@ const values = {
   autoLeave:'0', maxPosts:'2', minBlock:'1'
 };
 const document = {getElementById: id => ({value:values[id] || '', checked:false})};
-const context = vm.createContext({console,document,Date,Math,Set,Map,JSON,Array,Number,String,Object});
+const context = vm.createContext({console,document,values,Date,Math,Set,Map,JSON,Array,Number,String,Object});
 vm.runInContext(core, context, {timeout:10000});
 const ev = expression => vm.runInContext(expression,context,{timeout:10000});
 const setMonth = (y,m) => {
