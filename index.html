@@ -1179,7 +1179,7 @@ function buildFlexible(seed,c=cfg(),progress=()=>{}){
 
 function generateFlexible(){
   if(generating)return;
-  const bad=generationError();if(bad){alert(bad);return;}
+  const bad=generationError();if(bad){$('gaps').innerHTML=`<div class="gapbox"><h3>ROSTER NOT ISSUED</h3><p>${esc(bad)}</p></div>`;showTab('sRoster');return;}
   ensureAvail();autoAssignLeave();
   const signature=currentRosterSignature(),button=$('generate'),label=button.textContent;
   const controls={};document.querySelectorAll('input[id],select[id]').forEach(el=>controls[el.id]={value:el.value,checked:el.checked});
@@ -2694,14 +2694,21 @@ function invalidateRoster(){
 }
 function rosterIsCurrent(){
   if(roster && rosterSignature===currentRosterSignature()){
-    const conflicts=nightBalanceConflicts(roster);
+    const c=cfg();
+    const errors=validateHardRules({sched:roster,lateShiftMap,capWork:capWorkMap,events:evList,idleErrors:rosterMeta?.idleErrors||[]},c);
+    if(errors.length){
+      $('gaps').innerHTML=`<div class="gapbox"><h3>ROSTER NOT ISSUED — HARD RULES FAILED</h3><ul>${errors.slice(0,20).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p>Printing and export are blocked until a valid roster is generated.</p></div>`;
+      showTab('sRoster');
+      return false;
+    }
+    const conflicts=nightBalanceConflicts(roster,c);
     if(!conflicts.length) return true;
     showNightBalanceError(conflicts);
-    alert('Night duties are not balanced. Printing and export are blocked.');
     return false;
   }
   if(roster) invalidateRoster();
-  alert("Generate a current roster before exporting or printing.");
+  $('gaps').innerHTML='<div class="gapbox"><h3>ROSTER NOT ISSUED</h3><p>Generate a current roster before exporting or printing.</p></div>';
+  showTab('sRoster');
   return false;
 }
 function generate(){
@@ -2710,7 +2717,7 @@ function generate(){
 function generateLegacy(){
   if(generating) return;
   const bad = generationError();
-  if(bad){ alert(bad); return; }
+  if(bad){ $('gaps').innerHTML=`<div class="gapbox"><h3>ROSTER NOT ISSUED</h3><p>${esc(bad)}</p></div>`;showTab('sRoster');return; }
   ensureAvail();
   autoAssignLeave();
   // Re-plan pharmacy phases once for this generation. buildOnce() then reuses
