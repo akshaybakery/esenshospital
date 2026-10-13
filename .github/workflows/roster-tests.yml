@@ -1,0 +1,20 @@
+name: Roster regression checks
+on:
+  push:
+    branches:
+      - fix/roster-issuance-integrity-2026-10-14
+  pull_request:
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check tests/roster-smoke.cjs
+      - run: node tests/roster-smoke.cjs
+      - name: Continuous year scheduling smoke test
+        run: FULL_ROSTER_SMOKE=1 node tests/roster-smoke.cjs

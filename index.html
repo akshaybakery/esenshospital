@@ -529,7 +529,7 @@ body.auth-locked > :not(#authGate):not(script):not(style){visibility:hidden!impo
     <p class="note"><b>Exemptions</b> — fixed-shift staff keep their eligibility. Receptionist 3 remains NS-exempt from the fairness comparison and receives the lowest NS target found by the search.</p>
     <p class="note"><b>Peer-load fairness</b> — after hard coverage and safety rules, the planner minimises the difference between the highest and lowest day-side (DS+ES) totals and NS totals among comparable rotating staff in each department. NS spread must be 0–1 per month in every comparable group, including Nursing. day-side (DS+ES) totals are also balanced when leave and eligibility permit. Exempt staff are not used to judge fairness.</p>
     <p class="note"><b>Four-off rule</b> — four ordinary off dates are planned per month, including ordinary requested leave. Approved additional leave is separate (AL). Worked dates never reset the consecutive-work counter. If availability or prior-month work makes these rules incompatible, generation reports a conflict.</p>
-    <p class="note"><b>Nursing</b> — six nurses receive balanced NS totals with flexible blocks. Mondays and Fridays still require at least three day-side nurses. <b>On any date with more than two nurses on the day side, exactly one is assigned ES (12:00 PM–10:00 PM); the others remain DS (8:00 AM–6:00 PM).</b> ES counts as one normal 10-hour duty. The two nurses with Pharmacy-cover skill are kept on different rostered shifts; if both must work on the day side under the 10-NS monthly cap, one is assigned ES. NS Nursing prefers two; one is the emergency minimum and cannot take extra cover.</p>
+    <p class="note"><b>Nursing</b> — six nurses receive balanced NS totals with flexible blocks. Mondays and Fridays still require at least three day-side nurses. <b>On any date with more than two nurses on the day side, exactly one is assigned ES (12:00 PM–10:00 PM); the others remain DS (8:00 AM–6:00 PM).</b> ES counts as one normal 10-hour duty. The two nurses with Pharmacy-cover skill are kept on different rostered shifts; if both must work on the day side under the 11-NS contingency cap, one is assigned ES. NS Nursing prefers two; one is the emergency minimum and cannot take extra cover.</p>
     <p class="note"><b>Pharmacy coverage — hard rule</b> — three regular Pharmacy staff are scheduled first. Trained nurse cover is used only if a Pharmacy worker cannot cover that shift, and each occurrence is identified. An uncovered Pharmacy shift blocks the roster.</p>
     <p class="note"><b>Locked minimum:</b> Pharmacy requires <b>1 person on DS/ES and 1 person on NS</b>. This floor cannot be reduced below 1 in Setup; a roster with 0 Pharmacy staff on either shift is rejected.</p>
   </div>
@@ -751,29 +751,29 @@ let staff = [
   /* Your real headcount. Add more with "+ Add staff" on the Setup tab —
      new people just need their skills ticked and they enter the rota. */
   // Six nurses. Exactly two retain Pharmacy-cover competency; never pair them on one shift.
-  { name:"Nurse 1", sk:["Nursing","Pharmacy cover"], elig:"both", off:"", cap:10 },
-  { name:"Nurse 2", sk:["Nursing","Pharmacy cover"], elig:"both", off:"", cap:10 },
-  { name:"Nurse 3", sk:["Nursing"],                  elig:"both", off:"", cap:10 },
-  { name:"Nurse 4", sk:["Nursing"],                  elig:"both", off:"", cap:10 },
-  { name:"Nurse 5", sk:["Nursing"],                  elig:"both", off:"", cap:10 },
-  { name:"Nurse 6", sk:["Nursing"],                  elig:"both", off:"", cap:10 },
+  { name:"Nurse 1", sk:["Nursing","Pharmacy cover"], elig:"both", off:"", cap:11 },
+  { name:"Nurse 2", sk:["Nursing","Pharmacy cover"], elig:"both", off:"", cap:11 },
+  { name:"Nurse 3", sk:["Nursing"],                  elig:"both", off:"", cap:11 },
+  { name:"Nurse 4", sk:["Nursing"],                  elig:"both", off:"", cap:11 },
+  { name:"Nurse 5", sk:["Nursing"],                  elig:"both", off:"", cap:11 },
+  { name:"Nurse 6", sk:["Nursing"],                  elig:"both", off:"", cap:11 },
   // Pharmacy: three regular staff rotate across day and night. This lets
   // Pharmacy cover itself routinely; nurse fallback is reserved for emergencies.
-  { name:"Pharmacy Head",        sk:["Pharmacy"], elig:"day",  off:"", cap:10 },
-  { name:"Pharmacy Assistant 1", sk:["Pharmacy"], elig:"both", off:"", cap:10 },
-  { name:"Pharmacy Assistant 2", sk:["Pharmacy"], elig:"both", off:"", cap:10 },
+  { name:"Pharmacy Head",        sk:["Pharmacy"], elig:"day",  off:"", cap:11 },
+  { name:"Pharmacy Assistant 1", sk:["Pharmacy"], elig:"both", off:"", cap:11 },
+  { name:"Pharmacy Assistant 2", sk:["Pharmacy"], elig:"both", off:"", cap:11 },
   // Three regular Reception staff.
-  { name:"Reception 1", sk:["Reception"],   elig:"both", off:"", cap:10 },
-  { name:"Reception 2", sk:["Reception"],   elig:"both", off:"", cap:10 },
-  { name:"Reception 3", sk:["Reception"],   elig:"both", off:"", cap:10, avoidNights:true },
+  { name:"Reception 1", sk:["Reception"],   elig:"both", off:"", cap:11 },
+  { name:"Reception 2", sk:["Reception"],   elig:"both", off:"", cap:11 },
+  { name:"Reception 3", sk:["Reception"],   elig:"both", off:"", cap:11, avoidNights:true },
   // Laboratory
-  { name:"Lab Tech 1", sk:["Laboratory"],   elig:"both", off:"", cap:10 },
-  { name:"Lab Tech 2", sk:["Laboratory"],   elig:"both", off:"", cap:10 },
-  { name:"Lab Tech 3", sk:["Laboratory"],   elig:"both", off:"", cap:10 },
+  { name:"Lab Tech 1", sk:["Laboratory"],   elig:"both", off:"", cap:11 },
+  { name:"Lab Tech 2", sk:["Laboratory"],   elig:"both", off:"", cap:11 },
+  { name:"Lab Tech 3", sk:["Laboratory"],   elig:"both", off:"", cap:11 },
   // Housekeeping
-  { name:"Housekeeping 1", sk:["Housekeeping"], elig:"both", off:"", cap:10 },
-  { name:"Housekeeping 2", sk:["Housekeeping"], elig:"both", off:"", cap:10 },
-  { name:"Housekeeping 3", sk:["Housekeeping"], elig:"both", off:"", cap:10 },
+  { name:"Housekeeping 1", sk:["Housekeeping"], elig:"both", off:"", cap:11 },
+  { name:"Housekeeping 2", sk:["Housekeeping"], elig:"both", off:"", cap:11 },
+  { name:"Housekeeping 3", sk:["Housekeeping"], elig:"both", off:"", cap:11 },
   // Lives on site, covers X-Ray around the clock — never rostered into a shift.
   { name:"X-Ray Tech", sk:["X-Ray"], elig:"resident", off:"", cap:0 },
 ].map((s,i)=>({ id:"s"+i, ...s }));
@@ -781,7 +781,7 @@ let staff = [
 /* ===================================================================== */
 let avail = {}, autoOff = {}, roster = null, gapList = [], evList = [], seq = staff.length, stats = null, cycleOffMap = {}, lateShiftMap = {}, capWorkMap = {}, rosterMeta = null, pharmacyPhaseCache = null, nursingPhaseCache = null, receptionPhaseCache = null, departmentPhaseCache = null, rosterSignature = null, availabilityAnchor = null, issuedHistory = [], startState = {}, startStateDate = "", leaveApprovals = {}, workOffApprovals = {};
 const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-const DAY_HOURS = 10, NIGHT_HOURS = 14, MONTHLY_LEAVE_MAX = 4, MONTHLY_OFF_MAX = 4, MAX_MONTHLY_NIGHTS = 10;
+const DAY_HOURS = 10, NIGHT_HOURS = 14, MONTHLY_LEAVE_MAX = 4, MONTHLY_OFF_MAX = 5, MAX_MONTHLY_NIGHTS = 11;
 // Fairness means the max-minus-min gap between comparable employees' Day loads
 // and Night loads inside a department. Fixed-shift, resident, emergency-only and
 // night-exempt staff do not belong to that comparison set.
@@ -912,9 +912,14 @@ function isSunday(i, c=null){ return dateOf(i, c).getDay() === 0; }
 function isPeakNursingDay(p, i, c=null){
   return p.shift === "D" && (p.req||[]).includes("Nursing") && [1,5].includes(dateOf(i,c).getDay());
 }
+function isPeakPharmacyDay(p,i,c=null){
+  return p.shift==="D" && (p.req||[]).includes("Pharmacy") && [1,5].includes(dateOf(i,c).getDay());
+}
 function headsFor(p, i, c=null){
   const base = isSunday(i,c) ? p.su : p.wd;
-  return isPeakNursingDay(p,i,c) ? Math.max(3,base) : base;
+  if(isPeakNursingDay(p,i,c)) return Math.max(3,base);
+  if(isPeakPharmacyDay(p,i,c)) return Math.max(2,base);
+  return base;
 }
 /* Critical minimum floor. Pharmacy may never be configured or interpreted below
    one assigned person on either Day or Night. */
@@ -923,6 +928,7 @@ function effectivePostMin(p, preferred, i=null, c=null){
   let mn = p.min === undefined ? pref : Math.max(0, Number(p.min)||0);
   if((p.req||[]).includes("Pharmacy") || String(p.name||"").toLowerCase()==="pharmacy") mn = Math.max(1, mn);
   if(i!==null && isPeakNursingDay(p,i,c)) mn = Math.max(3,mn);
+  if(i!==null && isPeakPharmacyDay(p,i,c)) mn = Math.max(2,mn);
   return Math.min(mn, pref);
 }
 const holdsAll = (s,p)=> p.req.every(r=> s.sk.includes(r));
@@ -1034,7 +1040,10 @@ function solveFlexibleTeam(people,targets,c,rnd,fallback=[]){
     const s=people[j], target=targets[j], carried=flexibleCarry(s,c), nightCap=nightLimitFor(s);
     if(target > nightCap) return null;
     const extra=Array.from({length:n},(_,d)=>isApprovedExtraLeave(s,d));
-    const ordinaryTarget=Math.min(4,n-extra.filter(Boolean).length);
+    // Preserve the maximum six-day working run across month boundaries.
+    // Four ordinary offs remain the preferred target; a fifth is permitted
+    // only when a carried work run makes it necessary.
+    const ordinaryTarget=Math.max(4,Math.floor((n+carried.run)/7));
     const costs=Array.from({length:n},(_,d)=>Object.fromEntries(['O','D','N'].map(sh=>{
       const cd=counts[d].D+(sh==='D'),cn=counts[d].N+(sh==='N');
       return [sh,placementPenalty(d,cd,cn,cover[d].D+(sh==='D'&&trained(s)),cover[d].N+(sh==='N'&&trained(s)))+(rnd()-.5)*noise];
@@ -1140,7 +1149,7 @@ function buildFlexible(seed,c=cfg(),progress=()=>{}){
     let carry=flexibleCarry(s,c);
     for(let d=0;d<c.days;d++){
       const sh=plan[d];
-      if(sh==='O'){if(effectiveAvail(s,d)!=='-')cycleOff[s.id][d]=carry.prev==='N'?'NO':'DO';carry={run:0,nrun:0,prev:'O'};continue;}
+      if(sh==='O'){if(effectiveAvail(s,d)!=='-')cycleOff[s.id][d]=carry.prev==='N'&&carry.nrun>=5?'NO':'DO';carry={run:0,nrun:0,prev:'O'};continue;}
       const p=posts.find(p=>p.shift===sh&&p.req[0]===s.sk[0]&&holdsAll(s,p)&&headsFor(p,d,c)>0);
       if(!p)return {error:`No qualified ${sh} post for ${s.name}.`};
       sched[d][s.id]={D:[],N:[]};sched[d][s.id][sh]=[p.code];
@@ -1171,7 +1180,18 @@ function buildFlexible(seed,c=cfg(),progress=()=>{}){
     if(nurses.length>2){
       const trainedDay=nurses.filter(s=>s.sk.includes('Pharmacy cover'));
       const pool=(trainedDay.length>1?trainedDay:nurses).sort((a,b)=>lateCounts[a.id]-lateCounts[b.id]||rnd()-.5);
-      lateShiftMap[d]=pool[0].id;lateCounts[pool[0].id]++;
+      lateShiftMap[d]=[pool[0].id];lateCounts[pool[0].id]++;
+    }
+    // Monday/Friday pharmacy must retain a DS worker while another
+    // pharmacy-qualified worker covers ES until 22:00.
+    if([1,5].includes(dateOf(d,c).getDay())){
+      const p=posts.find(x=>x.shift==='D'&&x.req[0]==='Pharmacy');
+      const dayStaff=p?staff.filter(s=>(sched[d][s.id]?.D||[]).some(tag=>String(tag).replace(/[*+†]/g,'')===String(p.code))):[];
+      if(dayStaff.length>=2){
+        const pharmEs=dayStaff.slice().sort((a,b)=>lateCounts[a.id]-lateCounts[b.id]||rnd()-.5)[0];
+        if(!lateShiftMap[d])lateShiftMap[d]=[];
+        lateShiftMap[d].push(pharmEs.id);lateCounts[pharmEs.id]++;
+      }
     }
   }
   return {sched,st,cycleOff,lateShiftMap,events,gaps,idleErrors:[],capWork:{},flexible:true};
@@ -1179,7 +1199,7 @@ function buildFlexible(seed,c=cfg(),progress=()=>{}){
 
 function generateFlexible(){
   if(generating)return;
-  const bad=generationError();if(bad){alert(bad);return;}
+  const bad=generationError();if(bad){$('gaps').innerHTML=`<div class="gapbox"><h3>ROSTER NOT ISSUED</h3><p>${esc(bad)}</p></div>`;showTab('sRoster');return;}
   ensureAvail();autoAssignLeave();
   const signature=currentRosterSignature(),button=$('generate'),label=button.textContent;
   const controls={};document.querySelectorAll('input[id],select[id]').forEach(el=>controls[el.id]={value:el.value,checked:el.checked});
@@ -2374,6 +2394,7 @@ function validateHardRules(r, c=null){
     let consec=0, consecN=0, prevShift=null, prevWorked=false;
     let lastRunShift=null;
     const ordinaryOffByMonth={}, nightsByMonth={};
+    let nightOffCount=0;
     const carried=carryPhaseFor(s,c);
     if(carried!==null){
       if(s.elig==='day' || (carried>=0 && carried<=c.dayBlock)){
@@ -2402,6 +2423,11 @@ function validateHardRules(r, c=null){
       const sh = hasD ? "D" : hasN ? "N" : null;
       if(sh==="N"){ const key=monthKey(dateOf(i,c)); nightsByMonth[key]=(nightsByMonth[key]||0)+1; }
       if(!sh){
+        if(r.cycleOff?.[s.id]?.[i]==='NO'){
+          nightOffCount++;
+          if(prevShift!=='N'||consecN<5)add(`${s.name}: NIGHT OFF on day ${d} requires five consecutive preceding nights`);
+          if(nightOffCount>2)add(`${s.name}: more than two NIGHT OFF dates this month`);
+        }
         if(s.elig!=="resident" && !s.reserve && !isApprovedExtraLeave(s,i)){
           const key=monthKey(dateOf(i,c)); ordinaryOffByMonth[key]=(ordinaryOffByMonth[key]||0)+1;
         }
@@ -2472,11 +2498,19 @@ function validateHardRules(r, c=null){
     if(!p){ if([1,5].includes(dateOf(i,c).getDay())) add(`Day ${i+1}: no day Nursing post configured`); continue; }
     const working=staff.filter(s=>r.sched[i]?.[s.id]?.D?.some(tag=>String(tag).replace(/[*+†]/g,"")===String(p.code)));
     if([1,5].includes(dateOf(i,c).getDay()) && working.length<3) add(`Day ${i+1}: Monday/Friday needs three day nurses (found ${working.length})`);
-    const chosen=staff.find(s=>s.id===r.lateShiftMap?.[i]);
+    const eveningIds=eveningIdsFor(i,r.lateShiftMap);
+    const chosen=staff.find(s=>eveningIds.includes(s.id) && s.sk[0]==='Nursing');
     if(working.length>2 && (!chosen || !working.includes(chosen))) add(`Day ${i+1}: more than two day-side nurses are rostered but no Evening Shift (ES, 12:00 PM–10:00 PM) nurse is assigned`);
     if(working.length<=2 && chosen) add(`Day ${i+1}: Evening Shift (ES) assigned even though only ${working.length} day-side nurse${working.length===1?' is':'s are'} rostered`);
     const trainedDay=trained.filter(s=>working.includes(s));
     if(trainedDay.length>1 && (!chosen || !trainedDay.includes(chosen))) add(`Day ${i+1}: Pharmacy-cover nurses share the day-side roster without separating one to Evening Shift (ES)`);
+    if([1,5].includes(dateOf(i,c).getDay())){
+      const pharm=posts.find(x=>x.shift==='D'&&(x.req||[]).includes('Pharmacy'));
+      const pharmDay=pharm?staff.filter(s=>(r.sched[i]?.[s.id]?.D||[]).some(tag=>String(tag).replace(/[*+†]/g,'')===String(pharm.code))):[];
+      const pharmEvening=pharmDay.filter(s=>eveningIds.includes(s.id));
+      if(pharmDay.length<2 || pharmEvening.length!==1 || pharmDay.length-pharmEvening.length<1)
+        add(`Day ${i+1}: Pharmacy needs separate DS (08:00–18:00) and ES (12:00–22:00) staff on Monday/Friday`);
+    }
   }
 
   // Generic minimum-gap validation in generate() enforces Nursing coverage.
@@ -2501,6 +2535,12 @@ function validateHardRules(r, c=null){
       }
       if(multi>0 && free < (p.minFree||0)) add(`${p.name} ${sh} day ${i+1}: cover leaves only ${free} free (minimum ${p.minFree})`);
     }
+  }
+  for(let i=0;i<c.days;i++) for(const p of posts){
+    const pref=headsFor(p,i,c), min=effectivePostMin(p,pref,i,c);
+    if(!min)continue;
+    const filled=staff.filter(s=>(r.sched[i]?.[s.id]?.[p.shift]||[]).some(t=>String(t).replace(/[*+†]/g,'')===String(p.code))).length;
+    if(filled<min)add(`Day ${i+1}: ${p.name} ${p.shift} has ${filled} of ${min} mandatory staff`);
   }
   return errs;
 }
@@ -2677,7 +2717,7 @@ function generationError(){
 }
 function currentRosterSignature(){
   const c=cfg();
-  return JSON.stringify({start:c.start.toISOString(),days:c.days,weekOffs:c.weekOffs,
+  return JSON.stringify({rulesVersion:18,start:c.start.toISOString(),days:c.days,weekOffs:c.weekOffs,
     maxNights:c.maxNights,maxRun:c.maxRun,restAfterNight:c.restAfterNight,
     balance:c.balance,shortPolicy:c.shortPolicy,rotate:c.rotate,autoLeave:c.autoLeave,
     blockMode:c.blockMode,alternate:c.alternate,minBlock:c.minBlock,maxPosts:c.maxPosts,
@@ -2694,14 +2734,21 @@ function invalidateRoster(){
 }
 function rosterIsCurrent(){
   if(roster && rosterSignature===currentRosterSignature()){
-    const conflicts=nightBalanceConflicts(roster);
+    const c=cfg();
+    const errors=validateHardRules({sched:roster,cycleOff:cycleOffMap,lateShiftMap,capWork:capWorkMap,events:evList,idleErrors:rosterMeta?.idleErrors||[]},c);
+    if(errors.length){
+      $('gaps').innerHTML=`<div class="gapbox"><h3>ROSTER NOT ISSUED — HARD RULES FAILED</h3><ul>${errors.slice(0,20).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p>Printing and export are blocked until a valid roster is generated.</p></div>`;
+      showTab('sRoster');
+      return false;
+    }
+    const conflicts=nightBalanceConflicts(roster,c);
     if(!conflicts.length) return true;
     showNightBalanceError(conflicts);
-    alert('Night duties are not balanced. Printing and export are blocked.');
     return false;
   }
   if(roster) invalidateRoster();
-  alert("Generate a current roster before exporting or printing.");
+  $('gaps').innerHTML='<div class="gapbox"><h3>ROSTER NOT ISSUED</h3><p>Generate a current roster before exporting or printing.</p></div>';
+  showTab('sRoster');
   return false;
 }
 function generate(){
@@ -2710,7 +2757,7 @@ function generate(){
 function generateLegacy(){
   if(generating) return;
   const bad = generationError();
-  if(bad){ alert(bad); return; }
+  if(bad){ $('gaps').innerHTML=`<div class="gapbox"><h3>ROSTER NOT ISSUED</h3><p>${esc(bad)}</p></div>`;showTab('sRoster');return; }
   ensureAvail();
   autoAssignLeave();
   // Re-plan pharmacy phases once for this generation. buildOnce() then reuses
@@ -3100,7 +3147,7 @@ function renderRoster(){
       const dC = cl?.D?.length ? "b-day" : (lv||cyc||wo ? "b-off" : "b-free");
       const nC = cl?.N?.length ? "b-night" : (lv||cyc||wo ? "b-off" : "b-free");
       const mark = cl ? "" : (lv ? (manualLeave && isApprovedExtraLeave(s,i)?"AL":"L") : cyc || (wo ? "W" : ""));
-      html += `<td><div class="cell ro"><div class="band d ${dC}" style="color:var(--ink-soft)">${cl?.D?.length ? cl.D.join("+")+(lateShiftMap[i]===s.id?" ES":"")+(usedApprovedWork(s,i)?" !":"")+(usedCapWork(s,i)?" MC":"") : mark}</div><div class="band ${nC}">${cl?.N?.length ? cl.N.join("+")+(usedApprovedWork(s,i)?" !":"")+(usedCapWork(s,i)?" MC":"") : ""}</div></div></td>`;
+      html += `<td><div class="cell ro"><div class="band d ${dC}" style="color:var(--ink-soft)">${cl?.D?.length ? cl.D.join("+")+(isEveningStaff(i,s.id)?" ES":"")+(usedApprovedWork(s,i)?" !":"")+(usedCapWork(s,i)?" MC":"") : mark}</div><div class="band ${nC}">${cl?.N?.length ? cl.N.join("+")+(usedApprovedWork(s,i)?" !":"")+(usedCapWork(s,i)?" MC":"") : ""}</div></div></td>`;
     }
     html += `</tr>`;
     });
@@ -3332,10 +3379,10 @@ function renderCover(){
 
 function renderGaps(){
   const strip = coverStrip(), cover = renderCover(), minimumHeads = minimumHeadsUpScreen();
-  const ruleErrors = roster ? validateHardRules({sched:roster, lateShiftMap, capWork:capWorkMap, events:evList, idleErrors:rosterMeta?.idleErrors||[]}, cfg()) : [];
+  const ruleErrors = roster ? validateHardRules({sched:roster,cycleOff:cycleOffMap, lateShiftMap, capWork:capWorkMap, events:evList, idleErrors:rosterMeta?.idleErrors||[]}, cfg()) : [];
   const integrity = ruleErrors.length
     ? `<div class="gapbox"><h3>Hard-rule integrity check failed</h3><ul>${ruleErrors.slice(0,12).map(x=>`<li>${esc(x)}</li>`).join("")}</ul><p class="note" style="color:var(--alert)">Do not issue or print this roster.</p></div>`
-    : `<div class="okbox"><b>Hard-rule + utilisation check passed.</b> Maximum four ordinary off days per calendar month, hard 10-NS monthly cap, Monday/Friday three-nurse coverage, Evening Shift (ES, 12:00 PM–10:00 PM) assignment whenever more than two day-side nurses are present, separated Pharmacy-cover nurses, cycle limits, leave, skills and minimum coverage were checked.</div>`;
+    : `<div class="okbox"><b>Hard-rule + utilisation check passed.</b> Maximum four ordinary off days per calendar month, hard 11-NS contingency cap, Monday/Friday three-nurse coverage, Evening Shift (ES, 12:00 PM–10:00 PM) assignment whenever more than two day-side nurses are present, separated Pharmacy-cover nurses, cycle limits, leave, skills and minimum coverage were checked.</div>`;
   const hard = gapList.filter(g=> !g.adjust);
   const adj  = gapList.filter(g=>  g.adjust);
   const when = g => { const d = dateOf(g.day); return `${d.getDate()} ${d.toLocaleString("en",{month:"short"})} (${DOW[d.getDay()]})`; };
@@ -3417,6 +3464,11 @@ function staffingDepartments(){
   return out;
 }
 
+function eveningIdsFor(day, map=lateShiftMap){
+  const x=map?.[day];
+  return Array.isArray(x)?x:(x?[x]:[]);
+}
+function isEveningStaff(day,sid,map=lateShiftMap){return eveningIdsFor(day,map).includes(sid);}
 function staffingFor(day, dept, shift){
   const c=cfg();
   const residents=staff.filter(s=>s.elig==="resident" && (s.sk||[])[0]===dept);
@@ -3430,7 +3482,7 @@ function staffingFor(day, dept, shift){
   staff.forEach(s=>{
     const tags=roster?.[day]?.[s.id]?.[baseShift]||[];
     if(!tags.some(tag=>codes.has(String(tag).replace(/[*+†]/g,"")))) return;
-    const isEvening=baseShift==="D" && lateShiftMap[day]===s.id;
+    const isEvening=baseShift==="D" && isEveningStaff(day,s.id);
     if(shift==="E" && !isEvening) return;
     if(shift==="D" && isEvening) return;
     const notes=[];
@@ -3442,9 +3494,7 @@ function staffingFor(day, dept, shift){
   const minimumBase=deptPosts.reduce((sum,p)=>{
     const pref=headsFor(p,day,c); return sum+effectivePostMin(p,pref,day,c);
   },0);
-  const eveningSid=lateShiftMap[day];
-  const eveningIsHere=!!eveningSid && deptPosts.some(p=>(roster?.[day]?.[eveningSid]?.D||[]).some(tag=>String(tag).replace(/[*+†]/g,"")===String(p.code)));
-  const eveningCount=eveningIsHere?1:0;
+  const eveningCount=eveningIdsFor(day).filter(sid=>deptPosts.some(p=>(roster?.[day]?.[sid]?.D||[]).some(tag=>String(tag).replace(/[*+†]/g,"")===String(p.code)))).length;
   const preferred=shift==="E"?eveningCount:shift==="D"?Math.max(0,preferredBase-eveningCount):preferredBase;
   const minimum=shift==="E"?eveningCount:shift==="D"?Math.max(0,minimumBase-eveningCount):minimumBase;
   return {count:names.length,names,minimum,preferred,resident:false};
@@ -3575,7 +3625,7 @@ function pdSign(){
 function dutyOn(i, sid){
   const cl = roster?.[i]?.[sid];
   if(!cl) return null;
-  if(cl.D.length) return { sh:"D", codes:cl.D, late:lateShiftMap[i]===sid };
+  if(cl.D.length) return { sh:"D", codes:cl.D, late:isEveningStaff(i,sid) };
   if(cl.N.length) return { sh:"N", codes:cl.N };
   return null;
 }
@@ -3820,7 +3870,7 @@ function pdfDaily(){
       const byPost = { D:{}, E:{}, N:{} };
       Object.entries(roster[i]).forEach(([sid, cl])=>{
         (cl.D||[]).forEach(tag=>{
-          const sh=lateShiftMap[i]===sid?"E":"D";
+          const sh=isEveningStaff(i,sid)?"E":"D";
           const code = tag.replace(/[*+\u2020]/g,"");
           if(!byPost[sh][code]) byPost[sh][code] = [];
           byPost[sh][code].push(nameOf(sid) + (usedApprovedWork({id:sid},i)?' (approved cycle-off work)':'') + (usedCapWork({id:sid},i)?' (MC monthly-cap duty)':'') + (tag.endsWith("+") ? " +" : tag.endsWith("*") ? " *" : tag.endsWith("\u2020") ? " \u2020" : ""));
@@ -4150,7 +4200,7 @@ function postsOn(i, sh){
   const baseShift=sh==="E"?"D":sh;
   const byPost = {};
   Object.entries(roster[i]).forEach(([sid, cl])=> (cl[baseShift]||[]).forEach(tag=>{
-    const isEvening=baseShift==="D" && lateShiftMap[i]===sid;
+    const isEvening=baseShift==="D" && isEveningStaff(i,sid);
     if(sh==="E" && !isEvening) return;
     if(sh==="D" && isEvening) return;
     const code = tag.replace(/[*+\u2020]/g,"");
@@ -4255,7 +4305,7 @@ function exportCsv(){
     const r = [s.name, s.sk.join(" / ")];
     for(let i=0;i<c.days;i++){
       const cl = roster[i][s.id];
-      r.push(cl?.D?.length ? (lateShiftMap[i]===s.id?"ES 12:00 PM–10:00 PM ":"DS 8:00 AM–6:00 PM ")+cl.D.join("+")+(usedApprovedWork(s,i)?" APPROVED CYCLE-OFF WORK":"")+(usedCapWork(s,i)?" MC MONTHLY-CAP DUTY":"")
+      r.push(cl?.D?.length ? (isEveningStaff(i,s.id)?"ES 12:00 PM–10:00 PM ":"DS 8:00 AM–6:00 PM ")+cl.D.join("+")+(usedApprovedWork(s,i)?" APPROVED CYCLE-OFF WORK":"")+(usedCapWork(s,i)?" MC MONTHLY-CAP DUTY":"")
            : cl?.N?.length ? "NS 6:00 PM–8:00 AM "+cl.N.join("+")+(usedApprovedWork(s,i)?" APPROVED CYCLE-OFF WORK":"")+(usedCapWork(s,i)?" MC MONTHLY-CAP DUTY":"")
            : (avail[s.id]?.[i]==="-" || isFixedOff(s,i) ? (isApprovedExtraLeave(s,i)?"APPROVED EXTRA LEAVE":"LEAVE") : cycleOffMap[s.id]?.[i] ? (cycleOffMap[s.id][i]==="DO"?"DAY OFF":"NIGHT OFF") : isAutoOff(s,i) ? "WEEKLY OFF" : "UNEXPECTED IDLE"));
     }
@@ -4269,7 +4319,7 @@ function exportCsv(){
   download("duty-roster.csv", rows.map(r=> r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n"), "text/csv;charset=utf-8");
 }
 function saveSetup(){
-  download("roster-setup.json", JSON.stringify({ v:16, skills, posts, staff, avail, issuedHistory,
+  download("roster-setup.json", JSON.stringify({ v:18, skills, posts, staff, avail, issuedHistory,
     startState, startStateDate, leaveApprovals, workOffApprovals, settings:{
     startDate:$("startDate").value, numDays:$("numDays").value, weekOffs:$("weekOffs").value,
     attempts:$("attempts").value, maxNights:$("maxNights").value, maxRun:$("maxRun").value,
@@ -4287,7 +4337,7 @@ function loadSetup(text){
     startStateDate=typeof d.startStateDate==='string' ? d.startStateDate : '';
     leaveApprovals=d.leaveApprovals && typeof d.leaveApprovals==='object' ? d.leaveApprovals : {};
     workOffApprovals=d.workOffApprovals && typeof d.workOffApprovals==='object' ? d.workOffApprovals : {};
-    staff.forEach(s=>{ if(s.reserve === undefined) s.reserve = (s.sk||[]).includes("Reception cover"); s.cap = s.elig==="resident" ? 0 : Math.min(MAX_MONTHLY_NIGHTS, Number(s.cap)>0 ? Number(s.cap) : MAX_MONTHLY_NIGHTS); });
+    staff.forEach(s=>{ if(s.reserve === undefined) s.reserve = (s.sk||[]).includes("Reception cover"); s.cap = s.elig==="resident" ? 0 : ((+d.v||0)<18 && Number(s.cap)===10 ? 11 : Math.min(MAX_MONTHLY_NIGHTS, Number(s.cap)>0 ? Number(s.cap) : MAX_MONTHLY_NIGHTS)); });
     if((+d.v||0)<12) staff.forEach(s=>{
       if(String(s.name||'').trim().toLowerCase()==='reception 3' && (s.sk||[]).includes('Reception') && s.avoidNights===undefined)
         s.avoidNights=true;
@@ -4322,7 +4372,7 @@ function loadSetup(text){
         }
       });
       if(!staff.some(s=> (s.sk||[]).includes("Reception cover"))){
-        staff.push({ id:"s"+(staff.length), name:"Reception Cover", sk:["Reception cover"], elig:"both", off:"", cap:10, reserve:true });
+        staff.push({ id:"s"+(staff.length), name:"Reception Cover", sk:["Reception cover"], elig:"both", off:"", cap:11, reserve:true });
       }
     }
     if((+d.v||0) < 3){
@@ -4377,7 +4427,7 @@ function loadSetup(text){
 
   $("addSkill").onclick = ()=>{ const v = prompt("New skill name:"); if(v && v.trim()){ const k=v.trim(); if(skills.includes(k)){ alert("That skill already exists."); return; } skills.push(k); skillPanel(); postTable(); staffTable(); } };
   $("addPost").onclick = ()=>{ posts.push({ code:"?", name:"New post", shift:"D", req:[], fb:[], wd:1, su:1, min:1, share:false, keep:false, minFree:0, fbOk:false, adjust:false, callFb:false, flex:false }); postTable(); updateStatus(); renderFeasible(); };
-  $("addStaff").onclick = ()=>{ staff.push({ id:"s"+(seq++), name:"New staff", sk:[], elig:"both", off:"", cap:10, reserve:false }); staffTable(); ensureAvail(); renderAvail(); updateStatus(); renderStartStates(); renderWorkApprovals(); };
+  $("addStaff").onclick = ()=>{ staff.push({ id:"s"+(seq++), name:"New staff", sk:[], elig:"both", off:"", cap:11, reserve:false }); staffTable(); ensureAvail(); renderAvail(); updateStatus(); renderStartStates(); renderWorkApprovals(); };
   $("pasteStaff").onclick = ()=>{
     const txt = prompt("One per line:  Name, Skill / Skill, both|day|night\n\nExample:\nAnitha, Nursing / Pharmacy, both\nRehna, Pharmacy, day");
     if(!txt) return;
@@ -4387,7 +4437,7 @@ function loadSetup(text){
       const sk = (parts[1]||"").split("/").map(x=>x.trim()).filter(Boolean);
       sk.forEach(k=>{ if(!skills.includes(k)) skills.push(k); });
       const el = (parts[2]||"both").toLowerCase();
-      staff.push({ id:"s"+(seq++), name:nm, sk, elig:["both","day","night"].includes(el)?el:"both", off:"", cap:10, reserve:false });
+      staff.push({ id:"s"+(seq++), name:nm, sk, elig:["both","day","night"].includes(el)?el:"both", off:"", cap:11, reserve:false });
     });
     skillPanel(); postTable(); staffTable(); ensureAvail(); renderAvail(); updateStatus(); renderFeasible(); renderStartStates(); renderWorkApprovals();
   };
@@ -4422,7 +4472,7 @@ function loadSetup(text){
   document.addEventListener("click",()=>setTimeout(()=>{ if(roster && rosterSignature!==currentRosterSignature()) invalidateRoster(); },0));
 })();
 /* Debug hook — lets tests and the browser console inspect the live state. */
-window.__state = ()=>({ roster, avail, stats, gapList, evList, cycleOffMap, lateShiftMap, capWorkMap, rosterMeta, posts, staff, startState, startStateDate, leaveApprovals, workOffApprovals, cfg: cfg(), hardErrors: roster ? validateHardRules({sched:roster,lateShiftMap,capWork:capWorkMap,events:evList,idleErrors:rosterMeta?.idleErrors||[]}, cfg()) : [] });
+window.__state = ()=>({ roster, avail, stats, gapList, evList, cycleOffMap, lateShiftMap, capWorkMap, rosterMeta, posts, staff, startState, startStateDate, leaveApprovals, workOffApprovals, cfg: cfg(), hardErrors: roster ? validateHardRules({sched:roster,cycleOff:cycleOffMap,lateShiftMap,capWork:capWorkMap,events:evList,idleErrors:rosterMeta?.idleErrors||[]}, cfg()) : [] });
 </script>
 <script>
 const ROSTER_SUPABASE_URL = "https://aufmqhggktedbtxcdlhg.supabase.co";
@@ -4445,7 +4495,7 @@ function cloudStatus(message){
 function cloudSetupObject(){
   const prior = typeof getPriorDayNurses==="function" ? getPriorDayNurses() : [];
   return {
-    v:17, skills, posts, staff, avail, issuedHistory, startState, startStateDate,
+    v:18, skills, posts, staff, avail, issuedHistory, startState, startStateDate,
     leaveApprovals, workOffApprovals,
     settings:{
       startDate:$("startDate").value, numDays:$("numDays").value, weekOffs:$("weekOffs").value,
